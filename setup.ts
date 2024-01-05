@@ -504,16 +504,6 @@ async function main(): Promise<void> {
 
   if (shouldSetRecaptcha) {
     await recaptcha();
-  }
-
-  const { shouldSetRecaptchaSiteKey } = await inquirer.prompt({
-    type: "confirm",
-    name: "shouldSetRecaptchaSiteKey",
-    message: "Would you like to set up a reCAPTCHA site key?",
-    default: true,
-  });
-
-  if (shouldSetRecaptchaSiteKey) {
     await recaptchaSiteKey();
   }
 
