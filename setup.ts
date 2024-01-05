@@ -214,6 +214,17 @@ async function mongoDB(): Promise<void> {
   }
 }
 
+// Function to ask if the user wants to keep the entered values
+async function askToKeepValues(): Promise<boolean> {
+  const { keepValues } = await inquirer.prompt({
+    type: "confirm",
+    name: "keepValues",
+    message: `Would you like to keep the entered key?`,
+    default: true,
+  });
+  return keepValues;
+}
+
 //Get recaptcha details
 async function recaptcha(): Promise<void> {
   console.log(
@@ -239,13 +250,21 @@ async function recaptcha(): Promise<void> {
       },
     },
   ]);
-  const config = dotenv.parse(fs.readFileSync(".env"));
-  config.RECAPTCHA_SECRET_KEY = recaptchaSecretKey;
-  fs.writeFileSync(".env", "");
-  for (const key in config) {
-    fs.appendFileSync(".env", `${key}=${config[key]}\n`);
+
+  const shouldKeepDetails = await askToKeepValues();
+
+  if (shouldKeepDetails) {
+    const config = dotenv.parse(fs.readFileSync(".env"));
+    config.RECAPTCHA_SECRET_KEY = recaptchaSecretKey;
+    fs.writeFileSync(".env", "");
+    for (const key in config) {
+      fs.appendFileSync(".env", `${key}=${config[key]}\n`);
+    }
+  } else {
+    await recaptcha();
   }
 }
+
 async function recaptchaSiteKey(): Promise<void> {
   console.log(
     "\nPlease visit this URL to set up reCAPTCHA:\n\nhttps://www.google.com/recaptcha/admin/create"
@@ -270,11 +289,18 @@ async function recaptchaSiteKey(): Promise<void> {
       },
     },
   ]);
-  const config = dotenv.parse(fs.readFileSync(".env"));
-  config.RECAPTCHA_SITE_KEY = recaptchaSiteKey;
-  fs.writeFileSync(".env", "");
-  for (const key in config) {
-    fs.appendFileSync(".env", `${key}=${config[key]}\n`);
+
+  const shouldKeepDetails = await askToKeepValues();
+
+  if (shouldKeepDetails) {
+    const config = dotenv.parse(fs.readFileSync(".env"));
+    config.RECAPTCHA_SITE_KEY = recaptchaSiteKey;
+    fs.writeFileSync(".env", "");
+    for (const key in config) {
+      fs.appendFileSync(".env", `${key}=${config[key]}\n`);
+    }
+  } else {
+    await recaptchaSiteKey();
   }
 }
 
@@ -501,6 +527,13 @@ async function main(): Promise<void> {
     message: "Would you like to set up a reCAPTCHA secret key?",
     default: true,
   });
+
+  // const { keepRecaptchaKey } = await inquirer.prompt({
+  //   type: "confirm",
+  //   name: "keepRecaptchaDetails",
+  //   message: "Would you like to keep these reCAPTCHA details?",
+  //   default: true,
+  // })
 
   if (shouldSetRecaptcha) {
     await recaptcha();
