@@ -219,7 +219,7 @@ async function askToKeepValues(): Promise<boolean> {
   const { keepValues } = await inquirer.prompt({
     type: "confirm",
     name: "keepValues",
-    message: `Would you like to keep the entered key?`,
+    message: `Would you like to keep the entered key? `,
     default: true,
   });
   return keepValues;
