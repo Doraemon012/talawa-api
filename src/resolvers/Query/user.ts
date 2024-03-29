@@ -25,7 +25,7 @@ export const user: QueryResolvers["user"] = async (_parent, args, context) => {
 
   const user: InterfaceUser = (await User.findOne({
     _id: args.id,
-  }).lean()) as InterfaceUser;
+  }).populate('registeredEvents').lean()) as InterfaceUser;
   const userAppProfile: InterfaceAppUserProfile = (await AppUserProfile.findOne(
     {
       userId: user._id,
@@ -36,7 +36,7 @@ export const user: QueryResolvers["user"] = async (_parent, args, context) => {
     .populate("eventAdmin")
     .populate("adminFor")
     .lean()) as InterfaceAppUserProfile;
-
+    
   // This Query field doesn't allow client to see organizations they are blocked by
   return {
     user: {
