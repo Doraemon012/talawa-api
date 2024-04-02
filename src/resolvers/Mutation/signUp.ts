@@ -128,21 +128,26 @@ export const signUp: MutationResolvers["signUp"] = async (_parent, args) => {
     email: args.data.email.toLowerCase(), // ensure all emails are stored as lowercase to prevent duplicated due to comparison errors
     image: uploadImageFileName ? uploadImageFileName : null,
     password: hashedPassword,
+    isTemp: args.data.isTemp,
+  })
     // userType: isLastResortSuperAdmin ? "SUPERADMIN" : "USER",
-  });
-  let appUserProfile: InterfaceAppUserProfile = await AppUserProfile.create({
-    userId: createdUser._id,
-    appLanguageCode: args.data.appLanguageCode || "en",
-    isSuperAdmin: isLastResortSuperAdmin,
-    adminApproved: isLastResortSuperAdmin,
-  });
+  let appUserProfile: InterfaceAppUserProfile | null = null;
+  if (!args.data.isTemp) {
+    appUserProfile = await AppUserProfile.create({
+      userId: createdUser._id,
+      appLanguageCode: args.data.appLanguageCode || "en",
+      isSuperAdmin: isLastResortSuperAdmin,
+      adminApproved: isLastResortSuperAdmin,
+    });
+  }
 
   const updatedUser = await User.findOneAndUpdate(
     {
       _id: createdUser._id,
+
     },
     {
-      appUserProfileId: appUserProfile._id,
+      appUserProfileId: appUserProfile ? appUserProfile._id : null,
     },
     {
       new: true,
@@ -155,21 +160,23 @@ export const signUp: MutationResolvers["signUp"] = async (_parent, args) => {
     throw new Error("Failed to update user.");
   }
 
-  const accessToken = await createAccessToken(createdUser, appUserProfile);
-  const refreshToken = await createRefreshToken(createdUser, appUserProfile);
+  const accessToken = await createAccessToken(createdUser, appUserProfile as InterfaceAppUserProfile);
+  const refreshToken = await createRefreshToken(createdUser, appUserProfile as InterfaceAppUserProfile);
 
   copyToClipboard(`{
     "Authorization": "Bearer ${accessToken}"
   }`);
 
   const filteredCreatedUser = updatedUser.toObject();
-  appUserProfile = (await AppUserProfile.findOne({
-    userId: updatedUser?._id.toString(),
-  })
-    .populate("createdOrganizations")
-    .populate("createdEvents")
-    .populate("eventAdmin")
-    .populate("adminFor")) as InterfaceAppUserProfile;
+  if (appUserProfile) {
+    appUserProfile = (await AppUserProfile.findOne({
+      userId: updatedUser?._id.toString(),
+    })
+      .populate("createdOrganizations")
+      .populate("createdEvents")
+      .populate("eventAdmin")
+      .populate("adminFor")) as InterfaceAppUserProfile;
+  }
 
   delete filteredCreatedUser.password;
 

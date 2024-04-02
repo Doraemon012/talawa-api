@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import {
   INVALID_CREDENTIALS_ERROR,
   LAST_RESORT_SUPERADMIN_EMAIL,
+  TEMP_USER_ERROR,
   USER_NOT_FOUND_ERROR,
 } from "../../constants";
 import { errors, requestContext } from "../../libraries";
@@ -35,6 +36,15 @@ export const login: MutationResolvers["login"] = async (_parent, args) => {
       USER_NOT_FOUND_ERROR.PARAM,
     );
   }
+
+  if (user.isTemp) {
+    throw new errors.TemporaryUser(
+      requestContext.translate(TEMP_USER_ERROR.MESSAGE),
+      TEMP_USER_ERROR.CODE,
+      TEMP_USER_ERROR.PARAM,
+    );
+  }
+  
   // console.log(user);
   const isPasswordValid = await bcrypt.compare(
     args.data.password,

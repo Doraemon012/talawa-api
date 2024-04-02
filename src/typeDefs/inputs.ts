@@ -524,6 +524,8 @@ export const inputs = gql`
     password: String!
     appLanguageCode: String
     organizationUserBelongsToId: ID
+    isTemp: Boolean
+    isPwd: Boolean
   }
 
   input UserWhereInput {

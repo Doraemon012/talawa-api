@@ -18,3 +18,5 @@ export * from "./inputValidationError";
 export * from "./invalidFileTypeError";
 // Used for Image Upload size limit
 export * from "./ImageSizeLimitExceeded";
+// Used for temporary user
+export * from "./temporaryUser";

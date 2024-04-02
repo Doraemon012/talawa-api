@@ -51,6 +51,10 @@ export interface InterfaceUser {
   status: string;
 
   updatedAt: Date;
+  isTemp: boolean;
+  isPwd: boolean;
+  attendedEvents: PopulatedDoc<InterfaceEvent & Document>[];
+
 }
 /**
  * This describes the schema for a `User` that corresponds to `InterfaceUser` document.
@@ -154,6 +158,11 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+
+    isTemp: {
+      type: Boolean,
+      required: false,
+    },
     gender: {
       type: String,
       enum: ["MALE", "FEMALE", "OTHER", null],
@@ -217,6 +226,17 @@ const userSchema = new Schema(
         ref: "Event",
       },
     ],
+
+    attendedEvents: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Event",
+      },
+    ],
+    isPwd: {
+      type: Boolean,
+      required: false,
+    },
     status: {
       type: String,
       required: true,

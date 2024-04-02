@@ -27,6 +27,8 @@ import { me } from "./me";
 import { myLanguage } from "./myLanguage";
 import { organizations } from "./organizations";
 import { organizationsConnection } from "./organizationsConnection";
+import { getEventAttendee } from "./getEventAttendee";
+import { getEventAttendeesByEventId } from "./getEventAttendeesByEventId";
 import { organizationsMemberConnection } from "./organizationsMemberConnection";
 import { post } from "./post";
 import { registeredEventsByUser } from "./registeredEventsByUser";
@@ -35,6 +37,8 @@ import { userLanguage } from "./userLanguage";
 import { users } from "./users";
 import { usersConnection } from "./usersConnection";
 import { venue } from "./venue";
+import { getRecurringEventInstances } from "./getRecurringEventInstances";
+import { registrantsByEvent } from "./registrantsByEvent";
 
 export const Query: QueryResolvers = {
   actionItemsByEvent,
@@ -58,6 +62,8 @@ export const Query: QueryResolvers = {
   getDonationByOrgIdConnection,
   getlanguage,
   getPlugins,
+  getEventAttendee,
+  getEventAttendeesByEventId,
   isSampleOrganization,
   me,
   myLanguage,
@@ -73,4 +79,6 @@ export const Query: QueryResolvers = {
   getFundById,
   venue,
   fundsByOrganization,
+  getRecurringEventInstances,
+  registrantsByEvent
 };

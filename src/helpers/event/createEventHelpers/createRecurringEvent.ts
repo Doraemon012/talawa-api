@@ -31,6 +31,7 @@ export const createRecurringEvent = async (
   session: mongoose.ClientSession,
 ): Promise<InterfaceEvent> => {
   const { data } = args;
+
   let { recurrenceRuleData } = args;
 
   if (!recurrenceRuleData) {

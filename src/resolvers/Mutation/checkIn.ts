@@ -185,5 +185,15 @@ export const checkIn: MutationResolvers["checkIn"] = async (
   // attendeeData.checkInId = checkIn._id;
   // await attendeeData.save();
 
+  await User.updateOne(
+    {
+      _id: args.data.userId,
+    },
+    {
+      $push: {
+        attendedEvents: currentEvent
+      },
+    },
+  );
   return checkIn.toObject();
 };

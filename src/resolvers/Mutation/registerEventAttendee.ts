@@ -93,7 +93,6 @@ export const registerEventAttendee: MutationResolvers["registerEventAttendee"] =
     const requestUser = await User.findOne({
       _id: args.data.userId,
     }).lean();
-
     if (requestUser === null) {
       throw new errors.NotFoundError(
         requestContext.translate(USER_NOT_FOUND_ERROR.MESSAGE),

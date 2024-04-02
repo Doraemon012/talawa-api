@@ -250,6 +250,7 @@ export const types = gql`
     feedback: [Feedback!]!
     averageFeedbackScore: Float
     agendaItems: [AgendaItem]
+    pwdAttendees: [User]
   }
 
   type EventVolunteer {
@@ -275,6 +276,7 @@ export const types = gql`
     isCheckedOut: Boolean!
     createdAt: DateTime!
     updatedAt: DateTime!
+    isPwd: Boolean
   }
 
   type Feedback {
@@ -599,6 +601,9 @@ export const types = gql`
       organizationId: ID
     ): UserTagsConnection
     updatedAt: DateTime!
+    isTemp: Boolean
+    isPwd: Boolean
+    attendedEvents: [Event]
   }
   type AppUserProfile {
     _id: ID!

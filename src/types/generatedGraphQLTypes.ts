@@ -674,6 +674,7 @@ export type Event = {
   location?: Maybe<Scalars['String']['output']>;
   longitude?: Maybe<Scalars['Longitude']['output']>;
   organization?: Maybe<Organization>;
+  pwdAttendees?: Maybe<Array<Maybe<User>>>;
   recurrance?: Maybe<Recurrance>;
   recurrenceRule?: Maybe<RecurrenceRule>;
   recurring: Scalars['Boolean']['output'];
@@ -698,6 +699,7 @@ export type EventAttendee = {
   isCheckedIn: Scalars['Boolean']['output'];
   isCheckedOut: Scalars['Boolean']['output'];
   isInvited: Scalars['Boolean']['output'];
+  isPwd?: Maybe<Scalars['Boolean']['output']>;
   isRegistered: Scalars['Boolean']['output'];
   updatedAt: Scalars['DateTime']['output'];
   userId: Scalars['ID']['output'];
@@ -2155,6 +2157,7 @@ export type Query = {
   getFundraisingCampaignById: FundraisingCampaign;
   getFundraisingCampaignPledgeById: FundraisingCampaignPledge;
   getPlugins?: Maybe<Array<Maybe<Plugin>>>;
+  getRecurringEventInstances?: Maybe<Array<Maybe<Event>>>;
   getlanguage?: Maybe<Array<Maybe<Translation>>>;
   hasSubmittedFeedback?: Maybe<Scalars['Boolean']['output']>;
   isSampleOrganization: Scalars['Boolean']['output'];
@@ -2311,6 +2314,11 @@ export type QueryGetFundraisingCampaignByIdArgs = {
 
 
 export type QueryGetFundraisingCampaignPledgeByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetRecurringEventInstancesArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -2680,6 +2688,7 @@ export type User = {
   _id: Scalars['ID']['output'];
   address?: Maybe<Address>;
   appUserProfileId?: Maybe<AppUserProfile>;
+  attendedEvents?: Maybe<Array<Maybe<Event>>>;
   birthDate?: Maybe<Scalars['Date']['output']>;
   createdAt: Scalars['DateTime']['output'];
   educationGrade?: Maybe<EducationGrade>;
@@ -2689,6 +2698,8 @@ export type User = {
   firstName: Scalars['String']['output'];
   gender?: Maybe<Gender>;
   image?: Maybe<Scalars['String']['output']>;
+  isPwd?: Maybe<Scalars['Boolean']['output']>;
+  isTemp?: Maybe<Scalars['Boolean']['output']>;
   joinedOrganizations?: Maybe<Array<Maybe<Organization>>>;
   lastName: Scalars['String']['output'];
   maritalStatus?: Maybe<MaritalStatus>;
@@ -2758,6 +2769,8 @@ export type UserInput = {
   appLanguageCode?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['EmailAddress']['input'];
   firstName: Scalars['String']['input'];
+  isPwd?: InputMaybe<Scalars['Boolean']['input']>;
+  isTemp?: InputMaybe<Scalars['Boolean']['input']>;
   lastName: Scalars['String']['input'];
   organizationUserBelongsToId?: InputMaybe<Scalars['ID']['input']>;
   password: Scalars['String']['input'];
@@ -3670,6 +3683,7 @@ export type EventResolvers<ContextType = any, ParentType extends ResolversParent
   location?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   longitude?: Resolver<Maybe<ResolversTypes['Longitude']>, ParentType, ContextType>;
   organization?: Resolver<Maybe<ResolversTypes['Organization']>, ParentType, ContextType>;
+  pwdAttendees?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
   recurrance?: Resolver<Maybe<ResolversTypes['Recurrance']>, ParentType, ContextType>;
   recurrenceRule?: Resolver<Maybe<ResolversTypes['RecurrenceRule']>, ParentType, ContextType>;
   recurring?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -3689,6 +3703,7 @@ export type EventAttendeeResolvers<ContextType = any, ParentType extends Resolve
   isCheckedIn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isCheckedOut?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isInvited?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isPwd?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   isRegistered?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -4170,6 +4185,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getFundraisingCampaignById?: Resolver<ResolversTypes['FundraisingCampaign'], ParentType, ContextType, RequireFields<QueryGetFundraisingCampaignByIdArgs, 'id'>>;
   getFundraisingCampaignPledgeById?: Resolver<ResolversTypes['FundraisingCampaignPledge'], ParentType, ContextType, RequireFields<QueryGetFundraisingCampaignPledgeByIdArgs, 'id'>>;
   getPlugins?: Resolver<Maybe<Array<Maybe<ResolversTypes['Plugin']>>>, ParentType, ContextType>;
+  getRecurringEventInstances?: Resolver<Maybe<Array<Maybe<ResolversTypes['Event']>>>, ParentType, ContextType, RequireFields<QueryGetRecurringEventInstancesArgs, 'id'>>;
   getlanguage?: Resolver<Maybe<Array<Maybe<ResolversTypes['Translation']>>>, ParentType, ContextType, RequireFields<QueryGetlanguageArgs, 'lang_code'>>;
   hasSubmittedFeedback?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<QueryHasSubmittedFeedbackArgs, 'eventId' | 'userId'>>;
   isSampleOrganization?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryIsSampleOrganizationArgs, 'id'>>;
@@ -4257,6 +4273,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   address?: Resolver<Maybe<ResolversTypes['Address']>, ParentType, ContextType>;
   appUserProfileId?: Resolver<Maybe<ResolversTypes['AppUserProfile']>, ParentType, ContextType>;
+  attendedEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Event']>>>, ParentType, ContextType>;
   birthDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   educationGrade?: Resolver<Maybe<ResolversTypes['EducationGrade']>, ParentType, ContextType>;
@@ -4266,6 +4283,8 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   gender?: Resolver<Maybe<ResolversTypes['Gender']>, ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isPwd?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  isTemp?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   joinedOrganizations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Organization']>>>, ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   maritalStatus?: Resolver<Maybe<ResolversTypes['MaritalStatus']>, ParentType, ContextType>;

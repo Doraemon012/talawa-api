@@ -528,6 +528,12 @@ export const USER_NOT_FOUND_ERROR = {
   MESSAGE: "user.notFound",
   PARAM: "user",
 };
+export const TEMP_USER_ERROR = {
+  DESC: "Temporary User",
+  CODE: "user.temporary",
+  MESSAGE: "user.temporaryUser",
+  PARAM: "user",
+};
 export const USER_NOT_MADE_PLEDGE_ERROR = {
   DESC: "User has not made a pledge",
   CODE: "user.notPledged",

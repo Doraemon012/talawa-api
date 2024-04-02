@@ -27,6 +27,7 @@ import { RECURRING_EVENT_INSTANCES_QUERY_LIMIT } from "../../../constants";
 export const createRecurringEventInstancesDuringQuery = async (
   organizationId: string | undefined | null,
 ): Promise<void> => {
+
   if (!organizationId) {
     return;
   }

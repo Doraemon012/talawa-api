@@ -9,7 +9,7 @@ export interface InterfaceEventAttendee {
   _id: Schema.Types.ObjectId;
   userId: PopulatedDoc<InterfaceUser & Document>;
   eventId: PopulatedDoc<InterfaceEvent & Document>;
-  checkInId: PopulatedDoc<InterfaceCheckIn & Document> | null;
+  checkInId: PopulatedDoc<InterfaceCheckIn & Document>;
   isInvited: boolean;
   isRegistered: boolean;
   isCheckedIn: boolean;

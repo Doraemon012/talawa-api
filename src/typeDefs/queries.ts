@@ -142,5 +142,6 @@ export const queries = gql`
     ): [UserData]! @auth
 
     venue(id: ID!): Venue
+    getRecurringEventInstances(id: ID!): [Event]
   }
 `;

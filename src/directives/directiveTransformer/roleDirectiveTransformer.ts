@@ -29,6 +29,7 @@ function roleDirectiveTransformer(
           context,
           info,
         ): Promise<string> => {
+          
           const currentUser = await User.findOne({
             _id: context.userId,
           }).lean();

@@ -50,6 +50,7 @@ export const generateRecurringEventInstances = async ({
   organizationId,
   session,
 }: InterfaceGenerateRecurringInstances): Promise<InterfaceEvent> => {
+
   const recurringInstances: InterfaceRecurringEvent[] = [];
   recurringInstanceDates.map((date): void => {
     const createdEventInstance = {

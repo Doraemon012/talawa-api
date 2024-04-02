@@ -38,6 +38,7 @@ export interface InterfaceEvent {
   createdAt: Date;
   updatedAt: Date;
   agendaItems: PopulatedDoc<InterfaceAgendaItem & Document>[];
+  pwdAttendees: PopulatedDoc<InterfaceUser & Document>[];
 }
 
 /**
@@ -193,6 +194,7 @@ const eventSchema = new Schema(
       enum: ["ACTIVE", "BLOCKED", "DELETED"],
       default: "ACTIVE",
     },
+
   },
   {
     timestamps: true,

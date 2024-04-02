@@ -59,7 +59,7 @@ export const users: QueryResolvers["users"] = async (
     .limit(args.first ?? 0)
     .skip(args.skip ?? 0)
     .select(["-password"])
-
+    .populate('attendedEvents')
     .populate("joinedOrganizations")
     .populate("registeredEvents")
     .populate("organizationsBlockedBy")
